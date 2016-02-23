@@ -1,0 +1,18 @@
+13-Jan-2016 14:53:02: Morten ENDED on [15,20] in 4.307350e+02 minutes.
+13-Jan-2016 07:07:36: Kinect STARTED on [15,22]
+13-Jan-2016 07:07:34: Kinect ENDED on [18,15] in 2.942828e+02 minutes.
+12-Jan-2016 22:43:15: Morten STARTED on [15,20]
+12-Jan-2016 22:43:11: Morten ENDED on [15,17] in 3.883475e+02 minutes.
+12-Jan-2016 14:51:11: Kinect STARTED on [18,15]
+12-Jan-2016 14:51:09: Kinect ENDED on [18,22] in 3.015390e+02 minutes.
+12-Jan-2016 09:21:01: Morten STARTED on [15,17]
+12-Jan-2016 02:48:44: Kinect STARTED on [18,22]
+12-Jan-2016 02:48:42: Kinect ENDED on [16,16] in 3.166463e+02 minutes.
+11-Jan-2016 12:03:25: Kinect STARTED on [16,16]
+11-Jan-2016 09:28:46: markpp STARTED on [15,15]
+
+
+
+
+
+
