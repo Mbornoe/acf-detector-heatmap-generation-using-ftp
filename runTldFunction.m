@@ -8,7 +8,7 @@ disp(dispVarString);
 
 
 if(exist('models/', 'dir'))
-    delete('models/*');
+    %delete('models/*');
     delete('workerOut/*');
 end
 moveToFolderPath = strcat('outputResults/modelDS[',int2str(i),',',int2str(j),']-nOctUp[',int2str(nOctUp),']-treeDepth[',int2str(treeDepth),']/');

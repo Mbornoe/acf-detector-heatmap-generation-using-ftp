@@ -38,7 +38,7 @@ function  tldFunction(  modelDsX, modelDsY,nOctUp,treeDepth,nWeakLearners,dataDi
      detector = acfTrain(opts);
 
     %% Modify ACF Detector
-     pModify=struct('cascThr',0.5,'cascCal',0.7);
+     pModify=struct('cascThr',-1,'cascCal',0.7);
      detector=acfModify(detector,pModify);
 
      %% Initialize variable
@@ -76,24 +76,25 @@ function  tldFunction(  modelDsX, modelDsY,nOctUp,treeDepth,nWeakLearners,dataDi
     t = datestr([datetime('now')]);
     outStartDetectionString = sprintf('%s: Starting parallel detection process',t);
     disp(outStartDetectionString);
-    jpgFileName = strcat(theInputFilenamePath,'/framesCLAHE/',theInputFilename,'--', num2str(frameNumber,'%.5i'), '.png')
-    if exist(jpgFileName, 'file')
-        imageData = imread(jpgFileName);
-        imgLoi = imcrop(imageData,[0 0 myFrameWidth myFrameHeight]);
-        bbsAll = acfDetect(imgLoi,detector);
-        bbs = bbNms(bbsAll, 'type','max', 'overlap', 0.1);
-        FileNameWithExtension = strcat(theInputFilename,'--', num2str(frameNumber,'%.5i'), '.png');
-        for l = 1 : size(bbs,1)
-            %bbs(l,1)
-            %stringEvalResults = sprintf('%s;%i;%i;%i;%d;%f\n',FileNameWithExtension,bbs(l,1),bbs(l,2),bbs(l,3)+bbs(l,1),bbs(l,4)+bbs(l,2),bbs(l,5));
-            %disp('%====--------s;%i;%i;%i;%d;%f\n',FileNameWithExtension,bbs(l,1),bbs(l,2),bbs(l,3)+bbs(l,1),bbs(l,4)+bbs(l,2),bbs(l,5));
-            fprintf( w.Value, '%s;%.0f;%.0f;%.0f;%.0f;%f\n',FileNameWithExtension,bbs(l,1),bbs(l,2),bbs(l,3)+bbs(l,1),bbs(l,4)+bbs(l,2),bbs(l,5));
-            %fprintf(fileEvalResults,stringEvalResults);
+    parfor frameNumber = 0:numFrames-1
+        jpgFileName = strcat(theInputFilenamePath,'/framesCLAHE/',theInputFilename,'--', num2str(frameNumber,'%.5i'), '.png')
+        if exist(jpgFileName, 'file')
+            imageData = imread(jpgFileName);
+            imgLoi = imcrop(imageData,[0 0 myFrameWidth myFrameHeight]);
+            bbsAll = acfDetect(imgLoi,detector);
+            bbs = bbNms(bbsAll, 'type','max', 'overlap', 0.1);
+            FileNameWithExtension = strcat(theInputFilename,'--', num2str(frameNumber,'%.5i'), '.png');
+            for l = 1 : size(bbs,1)
+                %bbs(l,1)
+                %stringEvalResults = sprintf('%s;%i;%i;%i;%d;%f\n',FileNameWithExtension,bbs(l,1),bbs(l,2),bbs(l,3)+bbs(l,1),bbs(l,4)+bbs(l,2),bbs(l,5));
+                %disp('%====--------s;%i;%i;%i;%d;%f\n',FileNameWithExtension,bbs(l,1),bbs(l,2),bbs(l,3)+bbs(l,1),bbs(l,4)+bbs(l,2),bbs(l,5));
+                fprintf( w.Value, '%s;%.0f;%.0f;%.0f;%.0f;%f\n',FileNameWithExtension,bbs(l,1),bbs(l,2),bbs(l,3)+bbs(l,1),bbs(l,4)+bbs(l,2),bbs(l,5));
+                %fprintf(fileEvalResults,stringEvalResults);
+            end
+        else
+            fprintf('File %s does not exist.\n', jpgFileName);
         end
-    else
-        fprintf('File %s does not exist.\n', jpgFileName);
     end
-
     clear w;
     tEndReadFramePar = toc;
     t = datestr([datetime('now')]);

@@ -1,7 +1,7 @@
 setting = 'settings1';
 
-trainingDataDir = '../data/trafficLights/train/night';
-testDataDir = '../test/nightSeq1';
+trainingDataDir = '../../data/trafficLights/train/night';
+testDataDir = '../../data/trafficLights/test/nightClip1';
 
 keepRunning = -1;
 
@@ -63,11 +63,11 @@ while( keepRunning == 1)
 
 end
 
-if(keepRunning == =1)
+if(keepRunning == -1)
     t = datestr([datetime('now')]);
     workingDsX=20;
-    workingDsY=20;
-    runTldFunction(workingDsX,workingDsY,2, 4,[10,100,4000],trainingDataDir,testDataDir);
+    workingDsY=19;
+    runTldFunction(workingDsX,workingDsY,0, 2,[10,100,4000],trainingDataDir,testDataDir);
     t = datestr([datetime('now')]);
     doneDispString = sprintf('%s: Detection done on ModelDs[%s,%s]',t,num2str(workingDsX),num2str(workingDsY));
 end
