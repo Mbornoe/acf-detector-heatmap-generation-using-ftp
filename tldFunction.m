@@ -1,5 +1,6 @@
 function  tldFunction(  modelDsX, modelDsY,nOctUp,treeDepth,nWeakLearners,dataDir,theInputFilenamePath )
-%UNTITLED Summary of this function goes here
+    
+    %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
     %% Clean up and set environment
     %dataDir
@@ -25,11 +26,17 @@ function  tldFunction(  modelDsX, modelDsY,nOctUp,treeDepth,nWeakLearners,dataDi
     opts.pBoost.discrete=0;
     opts.pBoost.pTree.fracFtrs=1/16;
     opts.nNeg=175000;
+    %opts.nNeg=inf; 1.4mil windows exceeds maximum array size
     opts.nAccNeg=50000;
     opts.pPyramid.pChns.pGradHist.softBin=1; opts.pJitter=struct('flip',1);
-
+    
+    framePathDir = '/framesCLAHE/';
     opts.posWinDir=[dataDir '/posCLAHE'];
     opts.negImgDir=[dataDir '/negCLAHE'];
+    
+%     framePathDir = '/frames/';
+%     opts.posWinDir=[dataDir '/pos'];
+%     opts.negImgDir=[dataDir '/neg'];
 
     opts.pPyramid.pChns.shrink=1;
     opts.name='models/Lisa+';
@@ -38,8 +45,8 @@ function  tldFunction(  modelDsX, modelDsY,nOctUp,treeDepth,nWeakLearners,dataDi
      detector = acfTrain(opts);
 
     %% Modify ACF Detector
-     pModify=struct('cascThr',-1,'cascCal',0.7);
-     detector=acfModify(detector,pModify);
+     pModify = struct('cascThr',0.9,'cascCal',0.1);
+     detector = acfModify(detector,pModify);
 
      %% Initialize variable
     gtBB(1)=0;
@@ -57,7 +64,7 @@ function  tldFunction(  modelDsX, modelDsY,nOctUp,treeDepth,nWeakLearners,dataDi
     %% Determine number of frames
     tic
     %theInputFilenamePath = '../test/nightSeq1';
-    videoReaderString = strcat(theInputFilenamePath,'/framesCLAHE/','*.png');
+    videoReaderString = strcat(theInputFilenamePath,framePathDir,'*.png');
     d = dir(videoReaderString);
     numFrames = floor(length(d));
     C = strsplit(d(1).name,'--');
@@ -77,8 +84,13 @@ function  tldFunction(  modelDsX, modelDsY,nOctUp,treeDepth,nWeakLearners,dataDi
     outStartDetectionString = sprintf('%s: Starting parallel detection process',t);
     disp(outStartDetectionString);
     parfor frameNumber = 0:numFrames-1
-        jpgFileName = strcat(theInputFilenamePath,'/framesCLAHE/',theInputFilename,'--', num2str(frameNumber,'%.5i'), '.png')
+        
+        jpgFileName = strcat(theInputFilenamePath,framePathDir,theInputFilename,'--', num2str(frameNumber,'%.5i'), '.png');
+        outStartDetectionString = sprintf('%s:',jpgFileName);
+        disp(outStartDetectionString);
+    
         if exist(jpgFileName, 'file')
+            
             imageData = imread(jpgFileName);
             imgLoi = imcrop(imageData,[0 0 myFrameWidth myFrameHeight]);
             bbsAll = acfDetect(imgLoi,detector);

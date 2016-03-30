@@ -67,7 +67,7 @@ if(keepRunning == -1)
     t = datestr([datetime('now')]);
     workingDsX=20;
     workingDsY=19;
-    runTldFunction(workingDsX,workingDsY,0, 2,[10,100,4000],trainingDataDir,testDataDir);
+    runTldFunction(workingDsX,workingDsY,2, 2,[10,100,4000],trainingDataDir,testDataDir);
     t = datestr([datetime('now')]);
     doneDispString = sprintf('%s: Detection done on ModelDs[%s,%s]',t,num2str(workingDsX),num2str(workingDsY));
 end
